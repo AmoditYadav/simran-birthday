@@ -6,12 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Simran — A Small Surprise</title>
     <link rel="stylesheet" href="styles/styles.css">
-    <!-- 
-      CUSTOMIZATION GUIDE:
-      1. To change the name: Update data-her-name="..." in <html> tag.
-      2. To change images: Replace files in assets/images/ with your own (photo1.jpg, etc).
-      3. To change text: Edit the typewriter-messages in scripts/main.js or call personalize() in console.
-    -->
 </head>
 
 <body>
@@ -29,7 +23,7 @@
             <div class="hero-content">
                 <h2 class="hero-title" aria-label="Simran">Simran</h2>
                 <p class="hero-subtitle">One small thing from me to you.</p>
-                <!-- CTA Button triggers confetti and scroll/reveal -->
+                <!-- CTA Button -->
                 <button id="cta-btn" class="pulse-btn" aria-label="Open your gift">Open your gift</button>
             </div>
         </header>
@@ -47,6 +41,26 @@
 
             <!-- Photo Carousel Section -->
             <section class="carousel-section" aria-label="Photo Gallery">
+                <div class="carousel-container">
+                    <button id="prev-btn" class="nav-btn" aria-label="Previous image">&lt;</button>
+                    <div class="carousel-track-container">
+                        <ul class="carousel-track">
+                            <li class="carousel-slide current-slide">
+                                <img data-src="assets/images/photo1.jpeg" alt="That afternoon"
+                                    class="carousel-img lazy">
+                            </li>
+                            <li class="carousel-slide">
+                                <img data-src="assets/images/photo2.jpeg" alt="Coffee & laughs"
+                                    class="carousel-img lazy">
+                            </li>
+                            <li class="carousel-slide">
+                                <img data-src="assets/images/photo3.jpeg" alt="Sunset together"
+                                    class="carousel-img lazy">
+                            </li>
+                        </ul>
+                    </div>
+                    <button id="next-btn" class="nav-btn" aria-label="Next image">&gt;</button>
+                </div>
                 <div class="carousel-nav">
                     <button class="carousel-indicator current-slide" aria-label="Go to slide 1"></button>
                     <button class="carousel-indicator" aria-label="Go to slide 2"></button>
@@ -59,6 +73,22 @@
                 <button id="secret-btn" class="secondary-btn">One last thing...</button>
             </section>
 
+            <!-- Mini Game Section -->
+            <section class="game-section glass" id="game-section">
+                <h3>One tiny game for you, Simran 💜</h3>
+                <p>Catch 5 floating hearts to unlock a message.</p>
+                <div id="game-container" aria-label="Game area: catch floating hearts">
+                    <!-- Hearts spawn here -->
+                </div>
+                <div id="game-ui">
+                    <span id="score">Hearts: 0 / 5</span>
+                </div>
+                <div id="game-message" class="hidden">
+                    <p>You just unlocked something small — but made with a lot of love 💜</p>
+                    <p class="monospace">"Every heart I catch is a moment I spend thinking of you."</p>
+                </div>
+            </section>
+
         </div>
     </main>
 
@@ -69,7 +99,7 @@
             <h3>A Secret Note</h3>
             <p>Because some words are better kept safe.</p>
             <div class="modal-actions">
-                <a href="assets/secret_message.pdf" download="For_Simran.pdf" class="download-btn">Download Message</a>
+                <a href="secret.html" class="download-btn">Open Message 💌</a>
             </div>
         </div>
     </div>
