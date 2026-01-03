@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" data-her-name="Simran" data-theme="dreamy">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Simran — A Small Surprise</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <!-- 
+      CUSTOMIZATION GUIDE:
+      1. To change the name: Update data-her-name="..." in <html> tag.
+      2. To change images: Replace files in assets/images/ with your own (photo1.jpg, etc).
+      3. To change text: Edit the typewriter-messages in scripts/main.js or call personalize() in console.
+    -->
+</head>
+
+<body>
+    <!-- Accessibility / Screen Reader Only -->
+    <h1 class="sr-only">A Birthday Surprise for Simran</h1>
+
+    <!-- Canvas for Particle Background -->
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+    <!-- Main Container -->
+    <main class="container">
+
+        <!-- Hero Section -->
+        <header class="hero-card glass" id="hero">
+            <div class="hero-content">
+                <h2 class="hero-title" aria-label="Simran">Simran</h2>
+                <p class="hero-subtitle">One small thing from me to you.</p>
+                <!-- CTA Button triggers confetti and scroll/reveal -->
+                <button id="cta-btn" class="pulse-btn" aria-label="Open your gift">Open your gift</button>
+            </div>
+        </header>
+
+        <!-- Hidden Content Area (Revealed on click) -->
+        <div id="surprise-content" class="hidden" aria-live="polite">
+
+            <!-- Typewriter Message Section -->
+            <section class="message-section glass">
+                <div class="typewriter-container">
+                    <p id="typed-text" class="monospace"></p>
+                    <span class="cursor">|</span>
+                </div>
+            </section>
+
+            <!-- Photo Carousel Section -->
+            <section class="carousel-section" aria-label="Photo Gallery">
+                <div class="carousel-container">
+                    <button id="prev-btn" class="nav-btn" aria-label="Previous image">&lt;</button>
+                    <div class="carousel-track-container">
+                        <ul class="carousel-track">
+                            <!-- Images lazy loaded. Replace with actual photos. -->
+                            <li class="carousel-slide current-slide">
+                                <img data-src="assets/images/photo1.jpeg" alt="That afternoon"
+                                    class="carousel-img lazy">
+                                <p class="caption">That afternoon</p>
+                            </li>
+                            <li class="carousel-slide">
+                                <img data-src="assets/images/photo2.jpeg" alt="Coffee & laughs"
+                                    class="carousel-img lazy">
+                                <p class="caption">Coffee & laughs</p>
+                            </li>
+                            <li class="carousel-slide">
+                                <img data-src="assets/images/photo3.jpeg" alt="Sunset together"
+                                    class="carousel-img lazy">
+                                <p class="caption">Sunset together</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <button id="next-btn" class="nav-btn" aria-label="Next image">&gt;</button>
+                </div>
+                <!-- Pagination Dots -->
+                <div class="carousel-nav">
+                    <button class="carousel-indicator current-slide" aria-label="Go to slide 1"></button>
+                    <button class="carousel-indicator" aria-label="Go to slide 2"></button>
+                    <button class="carousel-indicator" aria-label="Go to slide 3"></button>
+                </div>
+            </section>
+
+            <!-- Secret Modal Trigger -->
+            <section class="secret-section">
+                <button id="secret-btn" class="secondary-btn">One last thing...</button>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Secret Modal -->
+    <div id="secret-modal" class="modal hidden" aria-hidden="true">
+        <div class="modal-content glass">
+            <span id="close-modal" class="close-btn">&times;</span>
+            <h3>A Secret Note</h3>
+            <p>Because some words are better kept safe.</p>
+            <div class="modal-actions">
+                <a href="assets/secret_message.pdf" download="For_Simran.pdf" class="download-btn">Download Message</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="glass footer">
+        <p>Made with code & heart.</p>
+        <button id="share-btn" class="icon-btn" aria-label="Share link">Share</button>
+        <div class="audio-controls">
+            <button id="audio-btn" aria-label="Play background music">Play Music</button>
+        </div>
+    </footer>
+
+    <!-- Audio Element -->
+    <audio id="bg-music" loop>
+        <source src="assets/audio/ambient.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script src="scripts/main.js"></script>
+</body>
+
+</html>
