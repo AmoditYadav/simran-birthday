@@ -1,0 +1,12 @@
+{
+    "name": "love-landing-for-simran",
+    "version": "1.0.0",
+    "description": "A small surprise for Simran.",
+    "scripts": {
+        "start": "python -m http.server 8000",
+        "deploy": "gh-pages -d ."
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}

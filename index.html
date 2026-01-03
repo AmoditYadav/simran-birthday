@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-her-name="Simran" data-theme="dreamy">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Simran — A Small Surprise</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+
+<body>
+    <!-- Accessibility / Screen Reader Only -->
+    <h1 class="sr-only">A Birthday Surprise for Simran</h1>
+
+    <!-- Canvas for Particle Background -->
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+    <!-- Main Container -->
+    <main class="container">
+
+        <!-- Tab Navigation -->
+        <nav id="tab-nav" class="glass">
+            <button class="tab-btn active" data-tab="home">Home</button>
+            <button class="tab-btn" data-tab="play">Play</button>
+            <button class="tab-btn" data-tab="card">Card</button>
+        </nav>
+
+        <!-- Tab: Home -->
+        <div id="tab-home" class="tab-content active">
+            <!-- Hero Section -->
+            <header class="hero-card glass" id="hero">
+                <div class="hero-content">
+                    <h2 class="hero-title" aria-label="Simran">Simran</h2>
+                    <p class="hero-subtitle">One small thing from me to you.</p>
+                    <!-- CTA Button -->
+                    <button id="cta-btn" class="pulse-btn" aria-label="Open your gift">Open your gift</button>
+                </div>
+            </header>
+
+            <!-- Hidden Content Area (Revealed on click) -->
+            <div id="surprise-content" class="hidden" aria-live="polite">
+
+                <!-- Typewriter Message Section -->
+                <section class="message-section glass">
+                    <div class="typewriter-container">
+                        <p id="typed-text" class="monospace"></p>
+                        <span class="cursor">|</span>
+                    </div>
+                </section>
+
+                <!-- Photo Carousel Section -->
+                <section class="carousel-section" aria-label="Photo Gallery">
+                    <div class="carousel-container">
+                        <button id="prev-btn" class="nav-btn" aria-label="Previous image">&lt;</button>
+                        <div class="carousel-track-container">
+                            <ul class="carousel-track">
+                                <li class="carousel-slide current-slide">
+                                    <img data-src="assets/images/photo1.jpeg" alt="That afternoon"
+                                        class="carousel-img lazy">
+                                </li>
+                                <li class="carousel-slide">
+                                    <img data-src="assets/images/photo2.jpeg" alt="Coffee & laughs"
+                                        class="carousel-img lazy">
+                                </li>
+                                <li class="carousel-slide">
+                                    <img data-src="assets/images/photo3.jpeg" alt="Sunset together"
+                                        class="carousel-img lazy">
+                                </li>
+                            </ul>
+                        </div>
+                        <button id="next-btn" class="nav-btn" aria-label="Next image">&gt;</button>
+                    </div>
+                    <div class="carousel-nav">
+                        <button class="carousel-indicator current-slide" aria-label="Go to slide 1"></button>
+                        <button class="carousel-indicator" aria-label="Go to slide 2"></button>
+                        <button class="carousel-indicator" aria-label="Go to slide 3"></button>
+                    </div>
+                </section>
+
+                <!-- Secret Modal Trigger -->
+                <section class="secret-section">
+                    <button id="secret-btn" class="secondary-btn">One last thing...</button>
+                </section>
+
+                <!-- Cinematic Video Section -->
+                <section class="video-section glass" id="memory-video">
+                    <h3>A moment I wanted to keep</h3>
+                    <div class="video-wrapper">
+                        <video id="main-video" controls playsinline preload="metadata">
+                            <source src="assets/videos/memory.mp4" type="video/mp4">
+                            <p>Your browser doesn't support this video. <a href="assets/videos/memory.mp4">Download it
+                                    here</a> to watch.</p>
+                        </video>
+                        <div class="video-overlay" id="video-overlay">
+                            <div class="play-icon">▶</div>
+                        </div>
+                    </div>
+                    <p id="video-end-msg" class="hidden">Some moments deserve replay 💜</p>
+                </section>
+            </div>
+        </div>
+
+        <!-- Tab: Play -->
+        <div id="tab-play" class="tab-content">
+            <!-- Hill Climb Car Game Section -->
+            <section class="game-section glass" id="car-game-section">
+                <h3>A tiny drive with you 💜</h3>
+                <p>Tap and hold to drive. Collect 7 hearts.</p>
+                <div id="car-game-container">
+                    <canvas id="car-game-canvas"></canvas>
+                </div>
+                <div id="game-message" class="hidden">
+                    <p>Every little journey feels better with you 💜</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab: Card -->
+        <div id="tab-card" class="tab-content">
+            <section class="card-section glass">
+                <h3>Your Birthday Card</h3>
+                <p>A little retro souvenir.</p>
+
+                <div class="card-container" id="card-render-area">
+                    <!-- The visually rendered card -->
+                    <canvas id="greeting-card-canvas" width="600" height="400"></canvas>
+                </div>
+
+                <div class="card-actions">
+                    <button id="download-card-btn" class="secondary-btn">Download Card ⬇️</button>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Retro Pixel Footer -->
+    <section id="retro-footer">
+        <canvas id="footer-canvas"></canvas>
+    </section>
+
+    <!-- Secret Modal -->
+    <div id="secret-modal" class="modal hidden" aria-hidden="true">
+        <div class="modal-content glass">
+            <span id="close-modal" class="close-btn">&times;</span>
+            <h3>A Secret Note</h3>
+            <p>Because some words are better kept safe.</p>
+            <div class="modal-actions">
+                <a href="secret.html" class="download-btn">Open Message 💌</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="glass footer">
+        <p>Made with code & heart.</p>
+        <button id="share-btn" class="icon-btn" aria-label="Share link">Share</button>
+        <div class="audio-controls">
+            <button id="audio-btn" aria-label="Play background music">Play Music</button>
+        </div>
+    </footer>
+
+    <!-- Audio Element -->
+    <audio id="bg-music" loop>
+        <source src="assets/audio/ambient.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="balloon-layer" aria-hidden="true"></div>
+    <!-- Safe Footer Layer (Fixed & Pass-Through) -->
+    <div id="safe-footer-layer" aria-hidden="true">
+        <canvas id="safe-footer-canvas"></canvas>
+    </div>
+
+    <script src="scripts/main.js"></script>
+</body>
+
+</html>

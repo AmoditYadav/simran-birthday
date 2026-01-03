@@ -1,0 +1,37 @@
+HILL CLIMB CAR GAME REPORT
+==========================
+
+1. REPLACEMENT STATUS
+---------------------
+- Old "Catch the Hearts" game removed from index.html, styles.css, and main.js.
+- New "Hill Climb" game section added:
+  - Canvas-based rendering
+  - Responsive container
+  - No external physics libraries
+
+2. GAME MECHANICS
+-----------------
+- Terrain: Procedural sine-wave hills.
+- Physics: Simple gravity, acceleration, and friction.
+- Objective: Drive continuously to collect hearts.
+- Win Condition: Collect 7 hearts to unlock the message.
+- Input:
+  - Mouse: Click and hold to drive.
+  - Touch: Tap and hold to drive.
+
+3. MOBILE OPTIMIZATION
+----------------------
+- Viewport: Canvas resizes dynamically to fit container width.
+- Height: Fixed to 300px to prevent layout shifts.
+- Touch Action: `touch-action: none` applied to prevent page scrolling while playing.
+- Performance: uses `requestAnimationFrame` for smooth 60fps loop.
+
+4. VERIFICATION
+---------------
+- Mobile Simulation: Verified on 375x812 viewport.
+- Gameplay: Acceleration and heart collection confirmed.
+- Scroll: Page scrolling works outside game container; blocked inside to allow control.
+
+5. STATUS
+---------
+Ready for deployment. The new game is integrated and functional.

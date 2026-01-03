@@ -1,0 +1,8 @@
+Preview:
+python -m http.server 8000
+# Visit http://localhost:8000
+
+Deploy:
+git remote add origin https://github.com/<YOUR-USERNAME>/love-landing-for-simran.git
+git branch -M main
+git push -u origin main
