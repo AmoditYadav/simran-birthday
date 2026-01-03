@@ -820,7 +820,122 @@ video {
     }
 
     .close-btn {
-        top: 5px;
-        right: 15px;
-    }
-}
+        /* =========================================
+   10. New Features (Tabs, Card, Footer)
+   ========================================= */
+
+        /* Tab Navigation */
+        #tab-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text);
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            box-shadow: 0 0 15px var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeInTab 0.4s ease-out;
+            width: 100%;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeInTab {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Card Section */
+        .card-section {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .card-container {
+            margin: 2rem auto;
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+        }
+
+        #greeting-card-canvas {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Retro Footer */
+        #retro-footer {
+            width: 100%;
+            margin-top: 3rem;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+            height: 120px;
+            /* Explicit height */
+            z-index: 1;
+        }
+
+        #footer-canvas {
+            display: block;
+            position: absolute;
+            /* Constrain to container */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            image-rendering: pixelated;
+            pointer-events: none;
+            /* Allow clicks to pass through if needed */
+            z-index: 0;
+        }
+
+        @media (min-width: 600px) {
+            #retro-footer {
+                height: 180px;
+            }
+
+            /* Inherit height from container matches logic */
+        }

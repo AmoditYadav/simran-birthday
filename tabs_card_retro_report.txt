@@ -1,0 +1,52 @@
+TABS, CARD & RETRO FOOTER REPORT
+================================
+
+1. TAB ARCHITECTURE
+-------------------
+- **Structure**:
+  - `#tab-nav` (Sticky top) contains [Home], [Play], [Card] buttons.
+  - Content divided into `.tab-content` containers.
+  - `#tab-home`: Hero, Carousel, Video.
+  - `#tab-play`: Hill Climb Game.
+  - `#tab-card`: New Greeting Card Generator.
+- **Behavior**:
+  - Class-based toggling (`.active`).
+  - No page reloads.
+  - `resize` event dispatching ensures Canvases redraw correctly when switching tabs.
+
+2. GREETING CARD FEATURE
+------------------------
+- **Canvas-based**: Renders a 600x400 pixel-art style card.
+- **Visuals**:
+  - Retro gradients (Purple/Blue).
+  - Scanline overlay.
+  - Pixel hearts decoration.
+  - Custom font rendering.
+- **Download**:
+  - One-click JS trigger exports canvas to PNG.
+  - Tested: Works without server-side processing.
+
+3. RETRO PIXEL FOOTER
+---------------------
+- **Design**: "Stardew Valley" inspired cozy footer.
+- **Elements**:
+  - Pixel Character (Walking with direction changes).
+  - Parallax Clouds (Slow moving).
+  - Swaying Grass (Sine wave animation).
+  - Occasional Butterflies.
+- **Safety**:
+  - `pointer-events: none` on canvas to prevent blocking interactions.
+  - Resizes based on container width.
+  - `requestAnimationFrame` loop handles animation efficiently.
+
+4. DEPLOYMENT & INTEGRITY
+-------------------------
+- [x] No changes to Vercel config.
+- [x] No external library imports.
+- [x] Mobile responsiveness preserved (Cards scale down).
+- [x] Footer does not obscure content (Height fixed 120px mobile / 180px desktop).
+
+5. STATUS
+---------
+READY FOR DEPLOYMENT.
+The site now feels like a cohesive "app" with multiple distinct experiences.

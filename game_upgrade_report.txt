@@ -1,0 +1,49 @@
+HILL CLIMB GAME UPGRADE REPORT
+==============================
+
+1. VISUAL UPGRADES
+------------------
+- **Car Rendering**: Now drawn with separate chassis, cabin, and rotating wheels.
+- **Suspension**: Added vertical bounce (sine wave based on velocity) for "floaty" feel.
+- **Terrain**: Implemented multi-layered sine wave generation for "rolling hills" effect.
+- **Parallax**: Added background hill layer moving at 30% speed for depth.
+- **Environment**: 
+  - Dynamic Sky Gradient (Day -> Night cycle based on distance).
+  - Procedural Stars appear at night.
+
+2. PHYSICS & FEEL
+-----------------
+- **Gravity**: Set to 0.1 (Gentle).
+- **Acceleration**: 0.05 / Friction: 0.02 (Smooth ramp).
+- **Rotation**: 
+  - Calculated based on 40px forward lookahead.
+  - Damped to prevent jitter.
+  - Clamped to +/- 0.6 radians to prevent flipping.
+- **Mobile Controls**:
+  - `touchstart` + `mousedown` triggers acceleration.
+  - `touchend` + `mouseup` triggers coasting.
+  - Spacebar support added for desktop.
+
+3. HEART SYSTEM (TIERED)
+------------------------
+- **Normal Heart (❤️)**: Value 1. Common.
+- **Big Heart (💜)**: Value 5. Chance > 75%.
+- **Gold Heart (💛)**: Value 10. Chance > 92%.
+- **Spawning**: Continuous stream ahead of the player (infinite generation).
+
+4. PROGRESSION
+--------------
+- **Milestones**: 10, 25, 50, 100, 200 Hearts.
+- **Feedback**:
+  - Visual particle explosion on collection.
+  - "Woo! N Hearts!" flash message on milestones.
+  - Sky changes color as you drive further.
+
+5. INTEGRITY CHECK
+------------------
+- [x] Index.html restored (Tabs/Footer visible).
+- [x] Mobile events scoped to game container.
+- [x] No external physics libraries used.
+- [x] Performance: Uses requestAnimationFrame, objects culled when off-screen.
+
+STATUS: UPGRADE DEPLOYED & STABLE.
