@@ -429,3 +429,127 @@ window.addEventListener('load', () => {
         }
     }, 1000);
 });
+
+/* =========================================
+   8. Interactive Balloons
+   ========================================= */
+function initBalloons() {
+    // Check constraints
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        console.log("Reduced motion enabled: Balloons disabled.");
+        return;
+    }
+
+    const container = document.getElementById('balloon-layer');
+    if (!container) return;
+
+    console.log("Balloon layer initialized");
+
+    const colors = [
+        'rgba(168, 109, 216, 0.6)', // Accent
+        'rgba(106, 17, 203, 0.4)',  // Deep Purple
+        'rgba(255, 105, 180, 0.4)', // Pink
+        'rgba(64, 224, 208, 0.4)'   // Turquoise
+    ];
+
+    let activeBalloons = 0;
+    const MAX_BALLOONS = 6;
+
+    function createBalloon() {
+        if (document.hidden) return; // Tab inactive
+        if (activeBalloons >= MAX_BALLOONS) {
+            setTimeout(createBalloon, 2000);
+            return;
+        }
+
+        const balloon = document.createElement('div');
+        balloon.classList.add('balloon');
+
+        // Random style
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        balloon.style.backgroundColor = color;
+
+        const size = 40 + Math.random() * 30;
+        balloon.style.width = `${size}px`;
+        balloon.style.height = `${size * 1.2}px`;
+
+        // Position
+        const startLeft = Math.random() * (window.innerWidth - size);
+        balloon.style.left = `${startLeft}px`;
+        balloon.style.bottom = '-100px';
+
+        // Float Animation
+        const duration = 8000 + Math.random() * 6000;
+        const sway = Math.random() * 50 - 25;
+
+        const animation = balloon.animate([
+            { transform: `translate(0, 0) rotate(0deg)` },
+            { transform: `translate(${sway}px, -${window.innerHeight + 200}px) rotate(${sway}deg)` }
+        ], {
+            duration: duration,
+            easing: 'linear',
+            fill: 'forwards'
+        });
+
+        activeBalloons++;
+        container.appendChild(balloon);
+
+        // Pop Handler
+        function pop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Visual Pop
+            spawnParticles(e.clientX, e.clientY, color);
+            console.log("Balloon pop interaction verified");
+
+            // Cleanup
+            activeBalloons--;
+            balloon.remove();
+        }
+
+        balloon.addEventListener('click', pop);
+        balloon.addEventListener('touchstart', pop, { passive: false });
+
+        // Auto remove on finish
+        animation.onfinish = () => {
+            if (balloon.parentNode) {
+                activeBalloons--;
+                balloon.remove();
+            }
+        };
+
+        // Schedule next spawn
+        setTimeout(createBalloon, 2000 + Math.random() * 2000);
+    }
+
+    function spawnParticles(x, y, color) {
+        for (let i = 0; i < 10; i++) {
+            const p = document.createElement('div');
+            p.classList.add('balloon-pop-particle');
+            p.style.backgroundColor = color; // match balloon
+            p.style.left = `${x}px`;
+            p.style.top = `${y}px`;
+
+            const destX = (Math.random() - 0.5) * 100;
+            const destY = (Math.random() - 0.5) * 100;
+
+            const anim = p.animate([
+                { transform: `translate(0, 0) scale(1)`, opacity: 1 },
+                { transform: `translate(${destX}px, ${destY}px) scale(0)`, opacity: 0 }
+            ], {
+                duration: 600 + Math.random() * 400,
+                easing: 'ease-out',
+                fill: 'forwards'
+            });
+
+            container.appendChild(p);
+            anim.onfinish = () => p.remove();
+        }
+    }
+
+    // Start cycle
+    createBalloon();
+}
+
+document.addEventListener('DOMContentLoaded', initBalloons);

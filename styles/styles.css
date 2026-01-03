@@ -433,6 +433,202 @@ h3 {
     animation: fadeIn 1s ease;
 }
 
+#next-btn {
+    right: 10px;
+}
+
+.carousel-nav {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.carousel-indicator {
+    border: none;
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.carousel-indicator.current-slide {
+    background: var(--accent);
+}
+
+/* Secret Modal */
+.modal {
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: var(--bg2);
+    background: linear-gradient(135deg, rgba(31, 28, 44, 0.9), rgba(106, 17, 203, 0.9));
+    padding: 3rem;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    text-align: center;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.secondary-btn {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--text);
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 2rem;
+    transition: all 0.3s;
+}
+
+.secondary-btn:hover {
+    background: var(--accent);
+}
+
+.download-btn {
+    display: inline-block;
+    margin-top: 1.5rem;
+    background: var(--accent);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+/* Footer */
+.footer {
+    width: 100%;
+    padding: 1.5rem;
+    margin-top: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#audio-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+/* Canvas */
+#particle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .hero-card {
+        padding: 2rem 1rem;
+    }
+}
+
+/* Mini Game */
+.game-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+#game-container {
+    height: 300px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    margin: 1rem 0;
+    position: relative;
+    overflow: hidden;
+    cursor: crosshair;
+    touch-action: none;
+}
+
+.heart-target {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s;
+    animation: floatUp 4s linear forwards;
+    z-index: 100;
+}
+
+.heart-target:active {
+    transform: scale(0.9);
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(300px) scale(0.5);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-50px) scale(1.2);
+        opacity: 0;
+    }
+}
+
+#game-ui {
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+#game-message {
+    padding: 1rem;
+    background: rgba(168, 109, 216, 0.2);
+    border-radius: 8px;
+    animation: fadeIn 1s ease;
+}
+
 .heart-pop {
     animation: pop 0.3s ease-out forwards;
 }
@@ -447,4 +643,69 @@ h3 {
         transform: scale(2);
         opacity: 0;
     }
+}
+
+/* Balloon Layer */
+#balloon-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 15;
+    /* Below hero-card (20) but above background */
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.balloon {
+    position: absolute;
+    width: 50px;
+    height: 60px;
+    background: radial-gradient(circle at 10px 10px, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1));
+    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+    box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    pointer-events: auto;
+    will-change: transform;
+    opacity: 0.9;
+}
+
+.balloon::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.balloon-pop-particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    transform: rotate(45deg);
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.balloon-pop-particle::before,
+.balloon-pop-particle::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: inherit;
+}
+
+.balloon-pop-particle::before {
+    left: -5px;
+}
+
+.balloon-pop-particle::after {
+    top: -5px;
 }
