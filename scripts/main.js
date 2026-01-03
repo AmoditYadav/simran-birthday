@@ -304,104 +304,291 @@ function fireConfetti() {
 /* =========================================
    6. Mini Game: Catch the Hearts
    ========================================= */
-function initGame() {
-    const container = document.getElementById('game-container');
-    const scoreEl = document.getElementById('score');
+/* =========================================
+   6. Mini Game: Hill Climb Hearts
+   ========================================= */
+function initCarGame() {
+    const canvas = document.getElementById('car-game-canvas');
+    const container = document.getElementById('car-game-container');
     const messageEl = document.getElementById('game-message');
-    // Guard clause if elements don't exist
-    if (!container || !scoreEl || !messageEl) return;
 
-    let score = 0;
-    let gameActive = true;
-    let spawnedCount = 0;
+    if (!canvas || !container) return;
 
-    // Prevent scrolling when touching game on mobile
-    container.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = []; // Confetti on win
 
-    function spawnHeart() {
-        if (!gameActive) return;
-        if (score >= 5) return;
+    // Game State
+    let state = {
+        running: false, // Starts on first interaction
+        gameOver: false,
+        score: 0,
+        winScore: 7,
+        scrollX: 0,
+        speed: 0,
+        maxSpeed: 5,
+        acceleration: 0.1,
+        friction: 0.05,
+        input: false
+    };
 
-        // Spawn throttling
-        if (container.children.length > 8) {
-            setTimeout(spawnHeart, 1000);
+    // Physics Assets
+    const car = {
+        x: 50,
+        y: 0, // Calculated dynamically
+        width: 40,
+        height: 20,
+        wheelSize: 8,
+        bounce: 0
+    };
+
+    let hearts = [];
+
+    // Resize Handler
+    function resize() {
+        width = container.offsetWidth;
+        height = container.offsetHeight;
+        canvas.width = width;
+        canvas.height = height;
+        // Keep car relative
+        car.x = width * 0.15;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Input Handlers
+    function startDrive(e) {
+        if (state.gameOver) return;
+        if (e.cancelable) e.preventDefault();
+        state.input = true;
+        if (!state.running) {
+            state.running = true;
+            resize(); // Ensure size is correct on start
+            loop();
+        }
+    }
+
+    function stopDrive(e) {
+        state.input = false;
+    }
+
+    container.addEventListener('mousedown', startDrive);
+    container.addEventListener('touchstart', startDrive, { passive: false });
+    window.addEventListener('mouseup', stopDrive);
+    window.addEventListener('touchend', stopDrive);
+
+    // Initial Hearts Generation
+    function generateHearts() {
+        hearts = [];
+        for (let i = 1; i <= 15; i++) {
+            hearts.push({
+                x: i * 300, // Every 300px
+                y: 0, // Calculated on terrain
+                collected: false
+            });
+        }
+    }
+    generateHearts();
+
+    // Terrain Function (Simple Sine Waves)
+    function getTerrainHeight(x) {
+        // Base hill + high frequency bumps
+        const base = Math.sin(x * 0.005) * 60;
+        const detail = Math.sin(x * 0.03) * 10;
+        return height - 100 + base + detail;
+    }
+
+    // Main Game Loop
+    function loop() {
+        if (!state.running) return;
+
+        // Safety check regarding tab visibility is handled by requestAnimationFrame automatically
+        // But if game is over, we still render particles or stop completely
+
+        update();
+        draw();
+
+        if (state.running && !state.gameOver) {
+            requestAnimationFrame(loop);
+        } else if (state.gameOver) {
+            // Continue loop for particle effects if we won
+            if (state.score >= state.winScore) requestAnimationFrame(loop);
+        }
+    }
+
+    function update() {
+        if (state.gameOver) {
+            updateParticles();
             return;
         }
 
-        const heart = document.createElement('div');
-        heart.classList.add('heart-target');
-        heart.textContent = '💜';
-
-        // Random Position
-        const left = Math.random() * (container.offsetWidth - 50);
-        heart.style.left = `${left}px`;
-
-        // Variable speed based on screen height
-        const duration = 3 + Math.random() * 3;
-        heart.style.animationDuration = `${duration}s`;
-
-        // Click Handler
-        function collect(e) {
-            // Prevent double counting
-            if (!gameActive || heart.classList.contains('collected')) return;
-            heart.classList.add('collected');
-
-            if (e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-
-            score++;
-            scoreEl.textContent = `Hearts: ${score} / 5`;
-
-            // Pop effect
-            heart.textContent = '✨';
-            heart.classList.add('heart-pop');
-
-            // Remove after pop
-            setTimeout(() => {
-                if (heart.parentNode) heart.remove();
-            }, 300);
-
-            if (score >= 5) {
-                gameActive = false;
-                completeGame();
-            }
+        // Speed Logic
+        if (state.input) {
+            state.speed += state.acceleration;
+            if (state.speed > state.maxSpeed) state.speed = state.maxSpeed;
+        } else {
+            state.speed -= state.friction;
+            if (state.speed < 0) state.speed = 0;
         }
 
-        heart.addEventListener('mousedown', collect);
-        heart.addEventListener('touchstart', collect, { passive: false });
+        state.scrollX += state.speed;
 
-        // Auto remove
-        heart.addEventListener('animationend', () => {
-            if (heart.parentNode) heart.remove();
+        // Bounce Logic (Cosmetic)
+        car.bounce = Math.sin(state.scrollX * 0.2) * 2;
+
+        // Collision with Hearts
+        hearts.forEach(heart => {
+            if (heart.collected) return;
+            // Relative X
+            const relX = heart.x - state.scrollX;
+            // Check if car overlaps
+            if (relX < car.x + car.width + 10 && relX > car.x - 30) {
+                // Simple proximity check
+                heart.collected = true;
+                state.score++;
+                // Spawn float text or particle? -> Just keeping it simple
+
+                if (state.score >= state.winScore) {
+                    winGame();
+                }
+            }
+        });
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, width, height);
+
+        // Draw Sky
+        // ctx.fillStyle = '#1f1c2c'; // handled by CSS bg
+
+        ctx.save();
+
+        // 1. Draw Terrain
+        ctx.beginPath();
+        ctx.moveTo(0, height);
+        ctx.fillStyle = '#2a1f3d'; // Darker purple ground
+
+        // Draw segments
+        for (let x = 0; x <= width; x += 10) {
+            const worldX = x + state.scrollX;
+            const y = getTerrainHeight(worldX);
+            ctx.lineTo(x, y);
+        }
+        ctx.lineTo(width, height);
+        ctx.fill();
+
+        // Highlight line
+        ctx.beginPath();
+        ctx.strokeStyle = '#a86dd8';
+        ctx.lineWidth = 3;
+        for (let x = 0; x <= width; x += 10) {
+            const worldX = x + state.scrollX;
+            const y = getTerrainHeight(worldX);
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        // 2. Draw Hearts
+        hearts.forEach(heart => {
+            if (heart.collected) return;
+            const relX = heart.x - state.scrollX;
+            // Optimization: only draw if on screen
+            if (relX > -50 && relX < width + 50) {
+                const groundY = getTerrainHeight(heart.x);
+                const floatY = groundY - 60 + Math.sin(Date.now() * 0.005) * 5;
+
+                ctx.font = "24px serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText("💜", relX, floatY);
+            }
         });
 
-        container.appendChild(heart);
-        spawnedCount++;
+        // 3. Draw Car
+        const carGroundY = getTerrainHeight(state.scrollX + car.x);
+        // Angle calculation for rotation
+        const nextGroundY = getTerrainHeight(state.scrollX + car.x + 20);
+        const angle = Math.atan2(nextGroundY - carGroundY, 20);
 
-        const nextSpawn = 500 + Math.random() * 1000;
-        setTimeout(spawnHeart, nextSpawn);
-    }
+        ctx.translate(car.x, carGroundY - car.wheelSize - 5 + car.bounce);
+        ctx.rotate(angle);
 
-    function completeGame() {
-        messageEl.classList.remove('hidden');
-        scoreEl.textContent = "Hearts: 5 / 5 (Complete!)";
-        console.log("Game Won!");
-    }
+        // Body
+        ctx.fillStyle = '#fff';
+        ctx.roundRect(-15, -15, car.width, car.height, 5);
+        ctx.fill();
 
-    // Start spawning only when visible
-    const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && gameActive && spawnedCount === 0) {
-            spawnHeart();
-        } else if (entries[0].isIntersecting && gameActive) {
-            // Resume if paused logic existed, but we just let the loop run
+        // Roof
+        ctx.fillStyle = '#a86dd8'; // accent
+        ctx.beginPath();
+        ctx.arc(5, -15, 12, Math.PI, 0);
+        ctx.fill();
+
+        // Wheels
+        ctx.fillStyle = '#333';
+        ctx.beginPath();
+        ctx.arc(-5, 5, car.wheelSize, 0, Math.PI * 2);
+        ctx.arc(25, 5, car.wheelSize, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+
+        // 4. Draw Score
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.font = "bold 16px sans-serif";
+        ctx.textAlign = "left";
+        ctx.fillText(`Hearts: ${state.score} / ${state.winScore}`, 20, 30);
+
+        // 5. Draw Instructions if not started
+        if (!state.running && !state.gameOver) {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.textAlign = "center";
+            ctx.font = "16px sans-serif";
+            ctx.fillText("Tap & Hold to Drive", width / 2, height / 2 - 20);
         }
-    });
-    observer.observe(container);
+
+        // 6. Win Particles
+        if (state.gameOver) {
+            particles.forEach(p => {
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+    }
+
+    function winGame() {
+        state.gameOver = true;
+        messageEl.classList.remove('hidden');
+
+        // Explode particles
+        for (let i = 0; i < 50; i++) {
+            particles.push({
+                x: width / 2,
+                y: height / 2,
+                vx: (Math.random() - 0.5) * 10,
+                vy: (Math.random() - 0.5) * 10,
+                size: Math.random() * 5,
+                color: `hsl(${Math.random() * 360}, 70%, 50%)`,
+                life: 1.0
+            });
+        }
+    }
+
+    function updateParticles() {
+        particles.forEach((p, index) => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.2; // gravity
+            p.life -= 0.02;
+            if (p.life <= 0) particles.splice(index, 1);
+        });
+    }
 }
 
-document.addEventListener('DOMContentLoaded', initGame);
+document.addEventListener('DOMContentLoaded', initCarGame);
 
 /* =========================================
    7. Self-Testing (Automated Verification)
