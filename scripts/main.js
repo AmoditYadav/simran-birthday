@@ -552,4 +552,74 @@ function initBalloons() {
     createBalloon();
 }
 
+
 document.addEventListener('DOMContentLoaded', initBalloons);
+
+/* =========================================
+   9. Cinematic Video Viewer
+   ========================================= */
+function initVideo() {
+    const video = document.getElementById('main-video');
+    const overlay = document.getElementById('video-overlay');
+    const wrapper = document.querySelector('.video-wrapper');
+    const endMsg = document.getElementById('video-end-msg');
+
+    if (!video || !overlay) return;
+
+    console.log("Video viewer initialized");
+
+    // Click to Play
+    overlay.addEventListener('click', () => {
+        video.play().then(() => {
+            overlay.classList.add('hidden');
+            console.log("Video playback verified (user initiated)");
+        }).catch(err => {
+            console.error("Video play error:", err);
+        });
+    });
+
+    // Show overlay on pause
+    video.addEventListener('pause', () => {
+        if (!video.seeking) {
+            overlay.classList.remove('hidden');
+        }
+    });
+
+    video.addEventListener('play', () => {
+        overlay.classList.add('hidden');
+    });
+
+    // End Message
+    video.addEventListener('ended', () => {
+        if (endMsg) {
+            endMsg.classList.remove('hidden');
+        }
+        overlay.classList.remove('hidden');
+    });
+
+    // Scroll Pause
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting && !video.paused) {
+                video.pause();
+                console.log("Video auto-paused (scrolled away)");
+            }
+            // Scale animation hook
+            if (entry.isIntersecting) {
+                entry.target.closest('.video-section').classList.add('in-view');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    const section = document.getElementById('memory-video');
+    if (section) observer.observe(section);
+
+    // Tab Visibility Pause
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden && !video.paused) {
+            video.pause();
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initVideo);
